@@ -11,8 +11,6 @@
 | Nombre | Rol |
 |--------|-----|
 | Jessica Melani Romero Lora | Estudiante |
-| Victor Manuel Santos Martínez | Estudiante |
-
 ---
 
 ## 📁 Estructura del repositorio
