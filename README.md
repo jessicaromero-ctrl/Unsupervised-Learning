@@ -1,150 +1,47 @@
-# 🤖 Aprendizaje No Supervisado
-### Universidad Politécnica Metropolitana de Hidalgo (UPMH)
-**Dr. Marcos Yamir Gomez** · Tercer Cuatrimestre
+# Datos
 
-> Repositorio de proyectos, reportes y materiales del programa de Aprendizaje No Supervisado. El paradigma central: inferir estructura latente a partir de datos no etiquetados, sin función objetivo explícita, para descubrir representaciones comprimidas, agrupaciones o reglas de asociación ocultas.
+Este directorio está reservado para archivos de datos locales. **Los datos no se versionan** (ver `.gitignore`).
 
 ---
 
-## 👥 Integrantes
+## Esquema de entrada: `entertainment.csv`
 
-| Nombre | Rol |
-|--------|-----|
-| Jessica Melani Romero Lora | Estudiante |
----
+El pipeline espera un archivo CSV en formato **largo** (*long format*) con la siguiente estructura:
 
-## 📁 Estructura del repositorio
+| Columna          | Tipo esperado | Descripción                                                                 |
+|------------------|---------------|-----------------------------------------------------------------------------|
+| `name`           | `str`         | Identificador del estudiante (nombre o clave única)                         |
+| `entertainment`  | `str`         | Categoría de entretenimiento. Valores válidos: `video_games`, `tv_shows`, `movies`, `books` |
+| `hours_per_week` | `float`       | Horas semanales dedicadas a la categoría. Acepta coma o punto como separador decimal |
+
+### Ejemplo de estructura esperada
 
 ```
-aprendizaje-no-supervisado/
-│
-├── 📂 proyectos/
-│   ├── 01_segmentacion_clientes/       # K-Means sobre datos de e-commerce
-│   │   ├── notebook.ipynb
-│   │   ├── data/
-│   │   └── informe/
-│   └── ...                             # Proyectos futuros
-│
-├── 📂 notas/
-│   ├── metricas_distancia.md           # Euclidiana, Manhattan, Coseno, Mahalanobis, Jaccard
-│   ├── mapa_conceptual_ANS.png         # Mapa visual del paradigma ANS
-│   └── ...
-│
-├── 📂 recursos/
-│   └── referencias.md
-│
-└── README.md
+name,entertainment,hours_per_week
+Estudiante_001,video_games,3.5
+Estudiante_001,tv_shows,7,0
+Estudiante_001,movies,2.0
+Estudiante_001,books,1.5
+Estudiante_002,video_games,10.0
+...
 ```
 
----
+### Restricciones
 
-## ✅ Proyectos completados
-
-### 01 · Segmentación de Clientes con K-Means
-**Archivo:** `proyectos/01_segmentacion_clientes/`
-
-Pipeline de segmentación sobre una base de datos sintética de e-commerce con **50 registros** y 3 variables comportamentales/demográficas.
-
-**Variables de entrada:**
-- Tiempo en App (hrs/semana)
-- Compras Mensuales
-- Edad
-
-**Metodología:**
-1. EDA con histogramas y matriz de correlación de Pearson
-2. Preprocesamiento con `StandardScaler`
-3. Selección de *k* mediante **Método del Codo** + **Coeficiente de Silhouette** → k = 3 (score = 0.598)
-4. Aplicación de K-Means (`random_state=42`, `n_init=10`)
-
-**Segmentos identificados:**
-
-| Segmento | Edad aprox. | Compras | Tiempo en App | Categoría principal |
-|----------|-------------|---------|---------------|---------------------|
-| 🟦 Exploradores Digitales | ~20 años | Baja | Alta | Electrónica / Videojuegos |
-| 🟧 Compradores Generacionales | ~30 años | Moderada | Moderado | Ropa / Hogar |
-| 🟩 Compradores Intensivos | ~45 años | Alta | Baja | Hogar / Electrodomésticos |
-
-**Stack:** `pandas` · `scikit-learn` · `matplotlib` · `seaborn`
+- Se espera exactamente **150 estudiantes únicos** en la configuración de referencia.
+- Cada estudiante puede tener entre 1 y 4 filas (una por categoría). Las categorías ausentes se imputarán con la media de columna.
+- Los valores de `hours_per_week` deben ser no negativos. Valores negativos no son filtrados por el pipeline actual.
 
 ---
 
-## 📚 Temas cubiertos
+## Esquema de salida: `entertainment_wide.csv`
 
-### Paradigma central — Aprendizaje No Supervisado
-El modelo infiere estructura latente a partir de datos **no etiquetados**, sin función objetivo explícita. Su objetivo es descubrir representaciones comprimidas, agrupaciones o reglas de asociación ocultas.
-
-| Área | Algoritmos / Técnicas |
-|------|-----------------------|
-| **Clustering** | K-Means, DBSCAN, Agrupamiento jerárquico |
-| **Reducción de dimensionalidad** | PCA, t-SNE, UMAP |
-| **Reglas de asociación** | Apriori, FP-Growth, Market Basket |
-| **Detección de anomalías** | Isolation Forest, LOF, Autoencoders |
-| **Modelos generativos** | GMM (EM), VAE, GAN |
-| **Embeddings** | Word2Vec, BERT, SimCLR |
-
-### Métricas de distancia en ML
-
-| Métrica | Tipo de dato ideal | Sensibilidad a escala | Uso típico |
-|---------|-------------------|----------------------|------------|
-| **Euclidiana (L²)** | Numérico continuo | Alta | k-NN, k-Means, PCA |
-| **Manhattan (L¹)** | Numérico / ordinal | Alta | LASSO, DBSCAN, detección de fraude |
-| **Coseno** | Vectores densos (texto, embeddings) | Nula | NLP, sistemas de recomendación |
-| **Mahalanobis** | Numérico con correlaciones | Nula | Detección de anomalías multivariadas |
-| **Jaccard** | Conjuntos binarios | Nula | Genómica, deduplicación de texto |
-
-### Métricas de evaluación (sin etiquetas)
-- **Índice de Silhouette** — separación relativa entre clusters (rango: −1 a +1)
-- **Davies-Bouldin** — razón entre dispersión intra-cluster y separación inter-cluster
-- **Calinski-Harabasz** — varianza entre grupos vs. varianza dentro de grupos
-- **Índice de Rand ajustado** — cuando existe *ground truth* parcial
-
----
-
-## 🛠️ Configuración del entorno
-
-```bash
-# Clonar el repositorio
-git clone https://github.com/<usuario>/aprendizaje-no-supervisado.git
-cd aprendizaje-no-supervisado
-
-# Instalar dependencias
-pip install -r requirements.txt
-```
-
-**`requirements.txt` recomendado:**
-```
-pandas
-numpy
-scikit-learn
-matplotlib
-seaborn
-jupyter
-umap-learn
-```
-
----
-
-## 🗓️ Proyectos futuros (planeados)
-
-- [ ] **02 · Reducción de dimensionalidad** — PCA + t-SNE sobre datos de alta dimensión
-- [ ] **03 · Detección de anomalías** — Isolation Forest aplicado a transacciones financieras
-- [ ] **04 · Reglas de asociación** — Market Basket Analysis con Apriori / FP-Growth
-- [ ] **05 · Modelos generativos** — GMM y comparación con K-Means
-- [ ] **06 · Embeddings y transfer learning** — Representaciones semánticas con BERT
-
----
-
-## 📖 Referencias
-
-1. Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer.
-2. Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning* (2nd ed.). Springer. [https://hastie.su.domains/ElemStatLearn/](https://hastie.su.domains/ElemStatLearn/)
-3. Murphy, K. P. (2022). *Probabilistic Machine Learning: An Introduction*. MIT Press.
-4. Deisenroth, M. P., Faisal, A. A., & Ong, C. S. (2020). *Mathematics for Machine Learning*. Cambridge University Press. [https://mml-book.github.io/](https://mml-book.github.io/)
-5. Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press. [https://www.deeplearningbook.org/](https://www.deeplearningbook.org/)
-6. Beyer, K. et al. (1999). When is 'nearest neighbor' meaningful? *Proceedings of ICDT*, 217–235.
-
----
-
-<p align="center">
-  Elaborado por Jessica Melani Romero Lora & Victor Manuel Santos Martínez · UPMH · 2026
-</p>
+| Columna            | Tipo     | Descripción                                                           |
+|--------------------|----------|-----------------------------------------------------------------------|
+| `name`             | `str`    | Identificador del estudiante                                          |
+| `video_games`      | `float`  | Horas/semana en videojuegos (imputada si faltante)                    |
+| `tv_shows`         | `float`  | Horas/semana en series de televisión (imputada si faltante)           |
+| `movies`           | `float`  | Horas/semana en películas (imputada si faltante)                      |
+| `books`            | `float`  | Horas/semana en lectura (imputada si faltante)                        |
+| `video_game_lover` | `int`    | `1` si `video_games > 7`, `0` en caso contrario                      |
+| `pct_screen`       | `float`  | Proporción de horas en pantalla sobre total. Rango esperado: [0, 1]  |
