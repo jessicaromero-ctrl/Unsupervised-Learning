@@ -1,0 +1,42 @@
+# ─── Entornos virtuales ───────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ─── Python bytecode ──────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# ─── Datos (no versionar datos crudos ni procesados) ─────────────────────────
+# Comentar las líneas siguientes si se desea versionar datos de muestra pequeños
+entertainment.csv
+entertainment_wide.csv
+data/*.csv
+data/*.parquet
+data/*.json
+
+# ─── Jupyter Notebooks — outputs ─────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ─── IDEs y editores ──────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ─── Cobertura y pruebas ──────────────────────────────────────────────────────
+.coverage
+htmlcov/
+.pytest_cache/
+*.log
+
+# ─── Distribución / empaquetado ───────────────────────────────────────────────
+dist/
+build/
+*.egg-info/
